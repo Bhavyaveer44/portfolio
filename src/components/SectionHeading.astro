@@ -1,0 +1,11 @@
+---
+interface Props {
+  title: string;
+  index?: string; // e.g. "01 — 03"
+}
+const { title, index } = Astro.props;
+---
+<div class="mb-6 flex items-baseline justify-between">
+  <h2 class="text-2xl font-bold md:text-3xl">{title}</h2>
+  {index && <span class="text-xs text-ink/50">{index}</span>}
+</div>

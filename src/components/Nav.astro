@@ -1,1 +1,22 @@
-<nav></nav>
+---
+const links = [
+  { href: '/projects', label: 'Work' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+];
+const path = Astro.url.pathname;
+---
+<nav class="flex items-center justify-between border-b border-ink px-6 py-4 text-sm md:px-10">
+  <a href="/" class="font-display font-bold tracking-wide">BHAVYA VEER</a>
+  <div class="flex gap-5">
+    {links.map((l) => (
+      <a
+        href={l.href}
+        class:list={[
+          'transition-colors hover:text-vermilion',
+          path === l.href && 'text-vermilion',
+        ]}
+      >{l.label}</a>
+    ))}
+  </div>
+</nav>
