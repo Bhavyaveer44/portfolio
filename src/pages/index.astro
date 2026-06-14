@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ProjectRowHero from '../components/ProjectRowHero.astro';
+import Button from '../components/Button.astro';
+import { getByPlacement } from '../data/projects';
+
+const heroes = getByPlacement('hero');
+---
+<BaseLayout title="Bhavya Veer — Developer">
+  <!-- HERO -->
+  <section class="border-b border-ink px-6 py-16 md:px-10 md:py-24">
+    <p class="mb-4 text-xs uppercase tracking-[0.2em] text-ink/50">Engineering intelligent software from the ground up.</p>
+    <h1 class="text-5xl font-bold md:text-7xl">
+      Built to <span class="text-vermilion">ship</span>,<br />not to sit in a repo.
+    </h1>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <Button href="/projects">See the work →</Button>
+      <Button href="/resume.pdf" variant="outline">Download résumé</Button>
+    </div>
+  </section>
+
+  <!-- SELECTED WORK -->
+  <section class="px-6 py-14 md:px-10">
+    <SectionHeading title="Selected work" index="01 — 03" />
+    {heroes.map((project, i) => <ProjectRowHero project={project} index={i + 1} />)}
+    <div class="border-t border-ink"></div>
+  </section>
+
+  <!-- MORE WORK BAND -->
+  <a href="/projects" class="flex items-center justify-between bg-ink px-6 py-8 text-cream md:px-10">
+    <span class="font-display text-2xl font-bold">+ 6 more shipped projects</span>
+    <span class="text-sm font-bold text-vermilion">Browse all →</span>
+  </a>
+</BaseLayout>

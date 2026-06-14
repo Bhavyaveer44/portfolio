@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const accessKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_KEY';
+---
+<BaseLayout title="Contact — Bhavya Veer" description="Get in touch with Bhavya Veer.">
+  <section class="grid gap-10 px-6 py-14 md:grid-cols-2 md:px-10">
+    <div>
+      <h1 class="text-4xl font-bold md:text-5xl">Get in touch.</h1>
+      <p class="mt-4 max-w-prose text-ink/70">Open to internships. Fastest ways to reach me:</p>
+      <div class="mt-6 flex flex-col gap-3 text-lg">
+        <a class="hover:text-vermilion" href="mailto:bhavyaveer@gmail.com">bhavyaveer@gmail.com</a>
+        <a class="hover:text-vermilion" href="https://github.com/Bhavyaveer44" target="_blank" rel="noopener noreferrer">github.com/Bhavyaveer44</a>
+        <a class="hover:text-vermilion" href="https://www.linkedin.com/in/bhavyaveer-kumar/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </div>
+    </div>
+    <form action="https://api.web3forms.com/submit" method="POST" class="flex flex-col gap-4">
+      <input type="hidden" name="access_key" value={accessKey} />
+      <input type="hidden" name="subject" value="Portfolio contact form" />
+      <input class="border border-ink bg-transparent px-4 py-3" type="text" name="name" placeholder="Your name" required />
+      <input class="border border-ink bg-transparent px-4 py-3" type="email" name="email" placeholder="Your email" required />
+      <textarea class="border border-ink bg-transparent px-4 py-3" name="message" rows="5" placeholder="Message" required></textarea>
+      <button type="submit" class="bg-ink px-5 py-3 text-sm font-bold text-cream transition-colors hover:bg-vermilion">Send →</button>
+    </form>
+  </section>
+</BaseLayout>
