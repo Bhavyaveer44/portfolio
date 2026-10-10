@@ -3,138 +3,180 @@ export type Placement = 'hero' | 'grid' | 'about';
 export interface Project {
   slug: string;
   name: string;
-  blurb: string; // plain-English one-liner (recruiter)
-  problem: string; // what it solves / your role (engineer)
-  tech: string[]; // stack tags
+  description: string;
+  tech: string[];
   liveUrl?: string;
   repoUrl?: string;
-  image: string; // path under /public
+  image?: string;
   placement: Placement;
+  figure?: 'riffle' | 'terrain' | 'exploded' | 'phosphor' | 'slow' | 'turntable' | 'terminal' | 'sieve';
 }
 
 export const projects: Project[] = [
   {
-    slug: 'rattafy-ai',
-    name: 'RattafyAI',
-    blurb: 'AI cram planner — turns a syllabus + deadline into a day-by-day study plan.',
-    problem:
-      'Students cramming for exams have no structure. I designed a planner that takes a syllabus and a date and produces an ordered, realistic study schedule.',
-    tech: ['Next.js', 'Groq', 'Vercel'],
-    liveUrl: 'https://rattafy.vercel.app',
-    repoUrl: 'https://github.com/Bhavyaveer44/rattafy',
-    image: '/images/projects/rattafy.png',
+    slug: 'finscope',
+    name: 'FinScope',
+    description:
+      'An autonomous equity research agent that plans multi-step financial research tasks, retrieves and synthesizes market data, and generates structured investment reports through advanced LLM-driven agentic workflows.',
+    tech: ['Python', 'Groq (Llama 3.3 70B)', 'FastAPI', 'Supabase', 'Next.js'],
+    liveUrl: 'https://fin-scope-seven.vercel.app/',
+    repoUrl: 'https://github.com/Bhavyaveer44/FinScope',
     placement: 'hero',
+    figure: 'riffle',
+  },
+  {
+    slug: 'kvd',
+    name: 'kvd',
+    description:
+      'A Redis-protocol-compatible (RESP v2) key-value store built entirely from scratch in Go using the standard library, featuring a 256-shard FNV-1a partitioned store for lock contention elimination and a write-ahead log for zero-data-loss durability.',
+    tech: ['Go', 'RESP Protocol', 'WAL', 'Concurrent Systems', 'TCP Networking'],
+    repoUrl: 'https://github.com/Bhavyaveer44/kvd',
+    placement: 'hero',
+    figure: 'exploded',
+  },
+  {
+    slug: 'collby',
+    name: 'Collby',
+    description:
+      'An offline-first collaborative rich-text editor implementing a Replicated Growable Array (RGA) CRDT and Peritext model from scratch in TypeScript, ensuring Strong Eventual Consistency across concurrent clients without a central server.',
+    tech: ['TypeScript', 'React', 'WebSockets', 'PostgreSQL', 'CRDT'],
+    liveUrl: 'https://collby-alpha.vercel.app/',
+    repoUrl: 'https://github.com/Bhavyaveer44/collby',
+    placement: 'hero',
+    figure: 'terminal',
+  },
+  {
+    slug: 'mockmirror',
+    name: 'MockMirror',
+    description:
+      'A privacy-first AI video and speech coaching tool that combines client-side MediaPipe computer vision for real-time posture and eye-contact tracking with Groq Whisper and LLM inference for instant transcription and feedback, ensuring raw video never leaves the device.',
+    tech: [
+      'Next.js 16 (App Router)',
+      'Tailwind v4',
+      'Clerk v7',
+      'Neon Postgres',
+      'Drizzle ORM',
+      'Groq',
+      'MediaPipe Tasks Vision',
+      'Recharts',
+    ],
+    liveUrl: 'https://mockmirror-five.vercel.app/',
+    repoUrl: 'https://github.com/Bhavyaveer44/mockmirror',
+    image: '/images/projects/mock-mirror.png',
+    placement: 'hero',
+    figure: 'phosphor',
+  },
+  {
+    slug: 'zenith',
+    name: 'Zenith',
+    description:
+      'A structured self-reflection tool featuring an advanced six-agent pipeline with an adversarial Verifier enforcing strict evidentiary bars, typed state-machine protocols, and a deterministic safety sentinel for risk screening.',
+    tech: ['Next.js', 'TypeScript', 'LLM Agents', 'pgvector', 'Adversarial Verification'],
+    liveUrl: 'https://zenith-red-one.vercel.app/',
+    repoUrl: 'https://github.com/Bhavyaveer44/zenith',
+    placement: 'hero',
+    figure: 'turntable',
+  },
+  {
+    slug: 'hybrag',
+    name: 'Hybrag',
+    description:
+      'A robust hybrid retrieval RAG pipeline fusing BM25 and FAISS vector retrieval via Reciprocal Rank Fusion, evaluated rigorously using RAGAS with trap questions, query classification, and a cross-encoder reranker.',
+    tech: ['Python', 'FAISS', 'BM25', 'Cross-Encoder', 'RAGAS', 'Groq'],
+    repoUrl: 'https://github.com/Bhavyaveer44/hybrag',
+    placement: 'hero',
+    figure: 'sieve',
+  },
+  {
+    slug: 'mcp-system-automation-agent',
+    name: 'MCP System Automation Agent',
+    description:
+      'A local agent that translates natural-language commands into file and shell operations using Model Context Protocol (MCP) and Ollama, securely confined to a jailed workspace with shell allowlists and local user confirmation.',
+    tech: ['Python', 'MCP SDK (FastMCP)', 'Ollama (mistral)', 'PyYAML'],
+    repoUrl: 'https://github.com/Bhavyaveer44/MCP-SystemAgent',
+    placement: 'grid',
+  },
+  {
+    slug: 'vit-pyq-insight',
+    name: 'VIT PYQ Insight',
+    description:
+      'An end-to-end agentic AI RAG workflow using LangChain and LangGraph state machines to scrape, parse, and semantically retrieve academic exam documents, drastically reducing student study-guide generation time.',
+    tech: ['Python', 'LangChain', 'LangGraph', 'Ollama', 'ChromaDB', 'RAG', 'NLP', 'Playwright'],
+    repoUrl: 'https://github.com/Bhavyaveer44/vit-pyq-insight',
+    placement: 'grid',
+  },
+  {
+    slug: 'etch',
+    name: 'Etch',
+    description:
+      'A system-wide background desktop utility and personalized vocabulary vault that captures highlighted text via global hotkeys, generates AI-powered mnemonic word cards, and reinforces long-term retention using a spaced repetition system.',
+    tech: ['Tauri', 'Rust', 'React', 'TypeScript', 'Groq API'],
+    repoUrl: 'https://github.com/Bhavyaveer44/etch',
+    placement: 'grid',
+  },
+  {
+    slug: 'ai-job-tracker',
+    name: 'AI-Powered Job Tracker',
+    description:
+      'A full-stack Kanban-style job application tracker featuring an agentic resume-rewrite loop powered by Groq to tailor resume content per listing alongside comprehensive funnel analytics.',
+    tech: ['Python', 'Groq', 'Supabase', 'React', 'Node.js'],
+    liveUrl: 'https://ai-job-tracker-dun.vercel.app/',
+    repoUrl: 'https://github.com/Bhavyaveer44/ai-job-tracker',
+    image: '/images/projects/job-tracker.png',
+    placement: 'grid',
+  },
+  {
+    slug: 'northstar',
+    name: 'NorthStar',
+    description:
+      'A proactive goal-keeper system that distills goal rationales into reusable reminders, exposes one next action at a time to reduce friction, and runs automated cron resurfacers for untouched goals.',
+    tech: ['Next.js', 'LLM Agents', 'Cron', 'Vercel'],
+    liveUrl: 'https://northstar-six-theta.vercel.app/',
+    repoUrl: 'https://github.com/Bhavyaveer44/northstar',
+    placement: 'grid',
+  },
+  {
+    slug: 'polymath',
+    name: 'Polymath',
+    description:
+      'A personal knowledge graph and capture-to-recall pipeline that distills freeform notes into structured knowledge cards, embeds them into pgvector, and powers cross-domain semantic connections and spaced repetition.',
+    tech: ['Next.js', 'pgvector', 'RAG', 'LLM Agents'],
+    liveUrl: 'https://polymath-red.vercel.app/',
+    repoUrl: 'https://github.com/Bhavyaveer44/polymath',
+    placement: 'grid',
   },
   {
     slug: 'staffroom',
     name: 'Staffroom',
-    blurb: 'A team of AI faculty agents — warden, registrar, planner, tutor — that run a class.',
-    problem:
-      'A multi-agent system where each agent owns a role and they coordinate to manage a classroom workflow.',
-    tech: ['Next.js 16', 'Clerk', 'Neon', 'AI SDK'],
-    liveUrl: 'https://staffroom-ten.vercel.app',
+    description:
+      'A multi-agent simulation modeling classroom dynamics through independent LLM-driven agents to explore emergent interaction patterns between simulated participants.',
+    tech: ['Python', 'LLM Agents'],
+    liveUrl: 'https://staffroom-ten.vercel.app/',
     repoUrl: 'https://github.com/Bhavyaveer44/staffroom',
     image: '/images/projects/staffroom.png',
-    placement: 'hero',
-  },
-  {
-    slug: 'ai-job-tracker',
-    name: 'AI Job Tracker',
-    blurb: 'Tracks job applications and uses AI to organize the hunt. (Yes — I built my own.)',
-    problem:
-      'I needed to manage my own internship search, so I built a tracker that uses AI to organize applications and status.',
-    tech: ['Next.js', 'Vercel'],
-    liveUrl: 'https://ai-job-tracker-dun.vercel.app/',
-    repoUrl: 'https://github.com/Bhavyaveer44/ai-job-tracker',
-    image: '/images/projects/job-tracker.png',
-    placement: 'hero',
-  },
-  {
-    slug: 'llm-queue',
-    name: 'LLM Queue',
-    blurb: 'A task inbox routed across free LLM tiers with quota tracking and fallback.',
-    problem:
-      'Free LLM API tiers run out. This routes each task to an available provider, tracks quota, and falls back automatically.',
-    tech: ['Next.js', 'Vercel'],
-    liveUrl: 'https://llm-queue-xi.vercel.app',
-    repoUrl: undefined,
-    image: '/images/projects/llm-queue.png',
     placement: 'grid',
   },
   {
-    slug: 'memory-lane',
-    name: 'Memory Lane',
-    blurb: 'A gamified walking journal where each day becomes an AI-forged object on a path.',
-    problem:
-      'Turns daily walks/journals into collectible AI-generated objects laid along a visual path.',
-    tech: ['Next.js', 'AI', 'Vercel'],
-    liveUrl: 'https://memory-lane-phi-sage.vercel.app',
-    repoUrl: undefined,
-    image: '/images/projects/memory-lane.png',
+    slug: 'rattafy',
+    name: 'Rattafy',
+    description:
+      'A fast, opinionated exam-prep assistant that turns a syllabus, study hours, and past-question papers into a ruthless study plan with predictive question breakdowns and model answers for last-minute preparation.',
+    tech: [
+      'Next.js 16',
+      'React 19',
+      'TypeScript',
+      'Tailwind CSS',
+      'PDF.js',
+      'Upstash Redis',
+      'Multi-API rotation (Groq, Hugging Face, Fireworks.ai)',
+    ],
+    liveUrl: 'https://rattafy.vercel.app/',
+    repoUrl: 'https://github.com/Bhavyaveer44/rattafy',
+    image: '/images/projects/rattafy.png',
     placement: 'grid',
-  },
-  {
-    slug: 'group-brain',
-    name: 'Group Brain',
-    blurb: 'An agentic bot that reads a class group chat — Q&A, deadline extraction, digests.',
-    problem:
-      'Reads a Telegram class group, answers questions from context (RAG), extracts deadlines, and posts digests.',
-    tech: ['Next.js 16', 'Neon/pgvector', 'Groq', 'Gemini'],
-    liveUrl: 'https://group-brain.vercel.app',
-    repoUrl: 'https://github.com/Bhavyaveer44/group-brain',
-    image: '/images/projects/group-brain.png',
-    placement: 'grid',
-  },
-  {
-    slug: 'scholar-saathi',
-    name: 'ScholarSaathi',
-    blurb: 'An agent that finds NSP scholarships matched to a student.',
-    problem:
-      'Helps students discover relevant National Scholarship Portal options without manual searching.',
-    tech: ['Next.js 16', 'Clerk', 'Neon', 'Groq'],
-    liveUrl: 'https://scholar-saathi.vercel.app',
-    repoUrl: 'https://github.com/Bhavyaveer44/scholar-saathi',
-    image: '/images/projects/scholar-saathi.png',
-    placement: 'grid',
-  },
-  {
-    slug: 'mock-mirror',
-    name: 'MockMirror',
-    blurb:
-      'An interview coach that analyzes body language in the browser — video never leaves your device.',
-    problem:
-      'On-device MediaPipe analyzes posture/expressions locally (privacy), while Groq Whisper + LLM handle speech feedback.',
-    tech: ['Next.js 16', 'MediaPipe', 'Groq Whisper'],
-    liveUrl: undefined, // not deployed — link a demo video or deploy
-    repoUrl: undefined,
-    image: '/images/projects/mock-mirror.png',
-    placement: 'grid',
-  },
-  {
-    slug: 'notesboard',
-    name: 'NotesBoard',
-    blurb: 'A collaborative notes board.',
-    problem: 'A shareable board for organizing notes.',
-    tech: ['Web', 'Render'],
-    liveUrl: 'https://notesboard-89ks.onrender.com/',
-    repoUrl: 'https://github.com/Bhavyaveer44/notesboard',
-    image: '/images/projects/notesboard.png',
-    placement: 'grid',
-  },
-  {
-    slug: 'pilot',
-    name: 'Pilot',
-    blurb: 'A general AI browser agent that drives a real browser to complete tasks.',
-    problem:
-      'A Playwright worker takes natural-language goals and operates a live browser, streamed to a Next.js UI over WebSocket.',
-    tech: ['Playwright', 'Groq', 'Next.js', 'Render'],
-    liveUrl: 'https://pilot-browser-agent.vercel.app',
-    repoUrl: undefined,
-    image: '/images/projects/pilot.png',
-    placement: 'about',
   },
 ];
 
 export function getByPlacement(placement: Placement): Project[] {
-  return projects.filter((p) => p.placement === placement);
+  return projects.filter((project) => project.placement === placement);
 }

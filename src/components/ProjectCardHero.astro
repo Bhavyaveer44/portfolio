@@ -5,13 +5,16 @@ interface Props { project: Project; }
 const { project } = Astro.props;
 ---
 <article id={project.slug} class="fade-up grid scroll-mt-24 gap-8 border-t border-ink py-12 md:grid-cols-2">
-  <div class="aspect-video border border-ink bg-ink/5">
-    <img src={project.image} alt={`${project.name} screenshot`} class="h-full w-full object-cover" loading="lazy" />
+  <div class="flex aspect-video items-center justify-center border border-ink bg-ink/5">
+    {project.image ? (
+      <img src={project.image} alt={`${project.name} screenshot`} class="h-full w-full object-cover" loading="lazy" />
+    ) : (
+      <span class="font-display text-2xl font-bold text-ink/40">{project.name}</span>
+    )}
   </div>
   <div class="flex flex-col">
     <h2 class="text-3xl font-bold md:text-4xl">{project.name}</h2>
-    <p class="mt-2 text-lg text-ink/80">{project.blurb}</p>
-    <p class="mt-4 max-w-prose text-ink/70">{project.problem}</p>
+    <p class="mt-4 max-w-prose text-ink/70">{project.description}</p>
     <p class="mt-4 text-xs uppercase tracking-widest text-ink/40">{project.tech.join(' · ')}</p>
     <div class="mt-6 flex gap-3">
       {project.liveUrl && <Button href={project.liveUrl}>Live demo →</Button>}

@@ -4,19 +4,18 @@ import ProjectCardHero from './ProjectCardHero.astro';
 import type { Project } from '../data/projects';
 
 const sample: Project = {
-  slug: 'demo', name: 'Demo', blurb: 'Recruiter line.',
-  problem: 'The deeper problem this solves.', tech: ['Astro'],
-  image: '/images/projects/demo.png', liveUrl: 'https://example.com',
+  slug: 'demo', name: 'Demo', description: 'The project description.',
+  tech: ['Astro'], liveUrl: 'https://example.com',
   placement: 'hero',
 };
 
 describe('ProjectCardHero', () => {
-  it('renders name, problem text, an id anchor, and the live button', async () => {
+  it('renders name, description, an id anchor, and the live button', async () => {
     const container = await AstroContainer.create();
     const html = await container.renderToString(ProjectCardHero, { props: { project: sample } });
     expect(html).toContain('id="demo"');
     expect(html).toContain('Demo');
-    expect(html).toContain('The deeper problem this solves.');
+    expect(html).toContain('The project description.');
     expect(html).toContain('https://example.com');
   });
 });

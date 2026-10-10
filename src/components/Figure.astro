@@ -1,0 +1,32 @@
+---
+export type FigureKind = 'riffle' | 'terrain' | 'exploded' | 'phosphor' | 'slow' | 'turntable' | 'terminal' | 'sieve';
+interface Props {
+  kind: FigureKind;
+  intensity?: number;
+  label?: string;
+  class?: string;
+}
+const { kind, intensity = 0.5, label, class: cls = '' } = Astro.props;
+---
+<div
+  class:list={['hairline-fig w-full', cls]}
+  data-kind={kind}
+  data-intensity={intensity}
+  data-label={label}
+></div>
+
+<script>
+  import * as hairline from '@lucasmarkes/hairline';
+
+  type Make = (el: HTMLElement, opts: Record<string, unknown>) => unknown;
+
+  document.querySelectorAll<HTMLElement>('.hairline-fig').forEach((el) => {
+    const make = (hairline as unknown as Record<string, Make>)[el.dataset.kind ?? ''];
+    if (!make) return;
+    make(el, {
+      intensity: Number(el.dataset.intensity ?? 0.5),
+      theme: 'light',
+      ...(el.dataset.label ? { label: el.dataset.label } : {}),
+    });
+  });
+</script>

@@ -1,28 +1,46 @@
 import { describe, it, expect } from 'vitest';
-import { projects, getByPlacement, type Project } from './projects';
+import { projects, getByPlacement } from './projects';
 
 describe('projects data', () => {
   it('every project has the required fields', () => {
     for (const p of projects) {
       expect(p.slug).toBeTruthy();
       expect(p.name).toBeTruthy();
-      expect(p.blurb).toBeTruthy();
+      expect(p.description).toBeTruthy();
       expect(Array.isArray(p.tech)).toBe(true);
       expect(['hero', 'grid', 'about']).toContain(p.placement);
     }
   });
 
-  it('has exactly 3 heroes in spec order', () => {
+  it('has exactly 6 home projects in the requested order', () => {
     const heroes = getByPlacement('hero');
     expect(heroes.map((p) => p.slug)).toEqual([
-      'rattafy-ai',
-      'staffroom',
+      'finscope',
+      'kvd',
+      'collby',
+      'mockmirror',
+      'zenith',
+      'hybrag',
+    ]);
+    expect(heroes.every((project) => project.figure)).toBe(true);
+  });
+
+  it('has exactly 8 more-work projects in the requested order', () => {
+    const grid = getByPlacement('grid');
+    expect(grid.map((p) => p.slug)).toEqual([
+      'mcp-system-automation-agent',
+      'vit-pyq-insight',
+      'etch',
       'ai-job-tracker',
+      'northstar',
+      'polymath',
+      'staffroom',
+      'rattafy',
     ]);
   });
 
-  it('has exactly 6 grid projects', () => {
-    expect(getByPlacement('grid')).toHaveLength(6);
+  it('has all 14 requested projects', () => {
+    expect(projects).toHaveLength(14);
   });
 
   it('slugs are unique', () => {

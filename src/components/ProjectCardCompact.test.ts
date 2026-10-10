@@ -4,7 +4,7 @@ import ProjectCardCompact from './ProjectCardCompact.astro';
 import type { Project } from '../data/projects';
 
 const withLinks: Project = {
-  slug: 'demo', name: 'Demo', blurb: 'Line.', problem: 'x',
+  slug: 'demo', name: 'Demo', description: 'Project description.',
   tech: ['Next.js'], image: '/images/projects/demo.png',
   liveUrl: 'https://example.com', repoUrl: 'https://github.com/x/y',
   placement: 'grid',
@@ -12,11 +12,11 @@ const withLinks: Project = {
 const noLinks: Project = { ...withLinks, liveUrl: undefined, repoUrl: undefined };
 
 describe('ProjectCardCompact', () => {
-  it('renders name, blurb, and both links when present', async () => {
+  it('renders name, description, and both links when present', async () => {
     const container = await AstroContainer.create();
     const html = await container.renderToString(ProjectCardCompact, { props: { project: withLinks } });
     expect(html).toContain('Demo');
-    expect(html).toContain('Line.');
+    expect(html).toContain('Project description.');
     expect(html).toContain('https://example.com');
     expect(html).toContain('https://github.com/x/y');
   });

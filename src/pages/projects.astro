@@ -8,11 +8,11 @@ import { getByPlacement } from '../data/projects';
 const heroes = getByPlacement('hero');
 const grid = getByPlacement('grid');
 ---
-<BaseLayout title="Work — Bhavya Veer" description="Selected projects by Bhavya Veer.">
+<BaseLayout title="Work - Bhavyaveer" description="Selected projects by Bhavyaveer.">
   <section class="px-6 py-14 md:px-10">
     <h1 class="text-5xl font-bold md:text-6xl">Work</h1>
     <p class="mt-3 max-w-prose text-ink/70">
-      Products I designed and shipped — built with AI as the engine, driven by me. Each ships a real, working thing.
+      Products I designed and shipped - built with AI as the engine, driven by me. Each ships a real, working thing.
     </p>
   </section>
 
@@ -21,7 +21,7 @@ const grid = getByPlacement('grid');
   </section>
 
   <section class="px-6 py-16 md:px-10">
-    <SectionHeading title="More work" index={`01 — 0${grid.length}`} />
+    <SectionHeading title="More work" index={`01 - 0${grid.length}`} />
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {grid.map((project) => <ProjectCardCompact project={project} />)}
     </div>
