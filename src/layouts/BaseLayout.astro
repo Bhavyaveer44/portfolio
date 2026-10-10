@@ -4,12 +4,13 @@ import '@fontsource-variable/space-grotesk';
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import DottedTrailCursor from '../components/DottedTrailCursor.astro';
 
 interface Props {
   title: string;
   description?: string;
 }
-const { title, description = 'Bhavya Veer — engineering intelligent software from the ground up.' } = Astro.props;
+const { title, description = 'Bhavyaveer - engineering intelligent software from the ground up.' } = Astro.props;
 const og = new URL('/og.png', Astro.site ?? 'https://portfolio-rho-liart-78.vercel.app').toString();
 ---
 
@@ -29,6 +30,7 @@ const og = new URL('/og.png', Astro.site ?? 'https://portfolio-rho-liart-78.verc
   </head>
   <body class="bg-cream text-ink antialiased">
     <Nav />
+    <DottedTrailCursor />
     <main>
       <slot />
     </main>

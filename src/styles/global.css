@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Editorial Bold design tokens — generate utilities like bg-cream, text-vermilion, font-display */
+/* Editorial Bold design tokens - generate utilities like bg-cream, text-vermilion, font-display */
 @theme {
   --color-cream: #f5f2ec;
   --color-ink: #111111;
@@ -8,6 +8,16 @@
 
   --font-display: "Space Grotesk Variable", system-ui, sans-serif;
   --font-sans: "Inter Variable", system-ui, sans-serif;
+}
+
+/* Hairline figures - plate MUST equal the page background (cream) */
+:root {
+  --hairline-plate: #f5f2ec;
+  --hairline-hi: #ff3b00;
+  --hairline-edge: #111111;
+  --hairline-mid: #6b675f;
+  --hairline-lo: #cfc9bd;
+  --hairline-stroke: 0.9;
 }
 
 @layer base {

@@ -1,0 +1,195 @@
+<canvas
+  class="dotted-trail-cursor"
+  aria-hidden="true"
+></canvas>
+
+<style>
+  :global(html.dotted-cursor-enabled),
+  :global(html.dotted-cursor-enabled *) {
+    cursor: none !important;
+  }
+
+  .dotted-trail-cursor {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  const settings = {
+    colorA: '#e34435',
+    colorB: '#e2404e',
+    headRadius: 11,
+    glowRadius: 20,
+    followSpeed: 0.85,
+    trailLength: 9,
+    fadeOnIdle: true,
+    idleDelay: 30,
+    idleFade: 510,
+    backgroundColor: '#ffffff',
+    dotColor: '#d1d1d1',
+    activeDotColor: '#ffffff',
+    dotSpacing: 24,
+    dotRadius: 0.2,
+    rimInner: 1,
+    rimOuter: 0.8,
+    edgeDesaturate: 0.9,
+    edgeDesaturateSpan: 1.5,
+    tailTilt: 0.03,
+  };
+
+  const canvas = document.querySelector<HTMLCanvasElement>('.dotted-trail-cursor');
+  const context = canvas?.getContext('2d');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const finePointer = window.matchMedia('(pointer: fine)');
+
+  if (canvas && context && !reducedMotion.matches && finePointer.matches) {
+    document.documentElement.classList.add('dotted-cursor-enabled');
+
+    type Point = { x: number; y: number };
+    const trail: Point[] = Array.from({ length: settings.trailLength }, () => ({ x: 0, y: 0 }));
+    const target: Point = { x: 0, y: 0 };
+    let active = false;
+    let lastMove = 0;
+    let frame = 0;
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+
+    const resize = () => {
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+      draw();
+    };
+
+    const draw = () => {
+      context.clearRect(0, 0, width, height);
+
+      const now = performance.now();
+      const idle = now - lastMove;
+      const fade = settings.fadeOnIdle && idle > settings.idleDelay
+        ? Math.max(0, 1 - (idle - settings.idleDelay) / settings.idleFade)
+        : 1;
+      const visible = active ? fade : 0;
+
+      context.fillStyle = settings.dotColor;
+      for (let y = settings.dotSpacing / 2; y < height; y += settings.dotSpacing) {
+        for (let x = settings.dotSpacing / 2; x < width; x += settings.dotSpacing) {
+          context.globalAlpha = 0.58;
+          context.beginPath();
+          context.arc(x, y, Math.max(1, settings.dotRadius * 4), 0, Math.PI * 2);
+          context.fill();
+        }
+      }
+
+      if (visible > 0) {
+        for (let i = trail.length - 1; i >= 0; i -= 1) {
+          const point = trail[i];
+          const progress = i / Math.max(1, trail.length - 1);
+          const radius = settings.glowRadius * (1 - progress * 0.68);
+          const alpha = visible * (1 - progress) * settings.rimOuter;
+          const gradient = context.createRadialGradient(point.x, point.y, 0, point.x, point.y, radius);
+          gradient.addColorStop(0, `${i % 2 === 0 ? settings.colorA : settings.colorB}${Math.round(alpha * 100).toString(16).padStart(2, '0')}`);
+          gradient.addColorStop(settings.rimInner, `${settings.colorB}00`);
+          context.globalAlpha = 1;
+          context.fillStyle = gradient;
+          context.beginPath();
+          context.arc(point.x, point.y, radius, 0, Math.PI * 2);
+          context.fill();
+        }
+
+        const activeRadius = settings.glowRadius * settings.edgeDesaturateSpan;
+        for (let y = settings.dotSpacing / 2; y < height; y += settings.dotSpacing) {
+          for (let x = settings.dotSpacing / 2; x < width; x += settings.dotSpacing) {
+            let influence = 0;
+            for (let i = 0; i < trail.length; i += 1) {
+              const point = trail[i];
+              const progress = i / trail.length;
+              const distance = Math.hypot(x - point.x, y - point.y);
+              influence = Math.max(influence, (1 - distance / activeRadius) * (1 - progress) * visible);
+            }
+            if (influence <= 0) continue;
+
+            context.globalAlpha = Math.min(1, influence * settings.edgeDesaturate);
+            context.fillStyle = settings.activeDotColor;
+            context.beginPath();
+            context.arc(x, y, Math.max(1, settings.dotRadius * 4), 0, Math.PI * 2);
+            context.fill();
+          }
+        }
+
+        const head = trail[0];
+        context.globalAlpha = visible;
+        context.fillStyle = settings.colorA;
+        context.beginPath();
+        context.arc(head.x, head.y, settings.headRadius, 0, Math.PI * 2);
+        context.fill();
+
+        context.globalAlpha = visible * settings.rimInner;
+        context.strokeStyle = settings.backgroundColor;
+        context.lineWidth = 1;
+        context.beginPath();
+        context.arc(head.x, head.y, settings.headRadius - 2, 0, Math.PI * 2);
+        context.stroke();
+      }
+
+      context.globalAlpha = 1;
+    };
+
+    const animate = () => {
+      frame = 0;
+      if (active) {
+        trail[0].x += (target.x - trail[0].x) * settings.followSpeed;
+        trail[0].y += (target.y - trail[0].y) * settings.followSpeed;
+        for (let i = 1; i < trail.length; i += 1) {
+          const previous = trail[i - 1];
+          const point = trail[i];
+          point.x += (previous.x - point.x) * 0.55;
+          point.y += (previous.y - point.y + settings.tailTilt * settings.dotSpacing) * 0.55;
+        }
+      }
+      draw();
+
+      if (active && (!settings.fadeOnIdle || performance.now() - lastMove <= settings.idleDelay + settings.idleFade)) {
+        frame = requestAnimationFrame(animate);
+      }
+    };
+
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(animate);
+    };
+
+    const onPointerMove = (event: PointerEvent) => {
+      target.x = event.clientX;
+      target.y = event.clientY;
+      if (!active) {
+        active = true;
+        trail.forEach((point) => {
+          point.x = target.x;
+          point.y = target.y;
+        });
+      }
+      lastMove = performance.now();
+      schedule();
+    };
+
+    const onPointerLeave = () => {
+      active = false;
+      context.clearRect(0, 0, width, height);
+      draw();
+    };
+
+    resize();
+    window.addEventListener('resize', resize);
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    document.documentElement.addEventListener('pointerleave', onPointerLeave);
+  }
+</script>

@@ -10,6 +10,6 @@ describe('Nav', () => {
     expect(html).toContain('href="/projects"');
     expect(html).toContain('href="/about"');
     expect(html).toContain('href="/contact"');
-    expect(html).toContain('BHAVYA VEER');
+    expect(html).toContain('Bhavyaveer');
   });
 });

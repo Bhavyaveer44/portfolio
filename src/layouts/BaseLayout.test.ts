@@ -13,5 +13,6 @@ describe('BaseLayout', () => {
     expect(html).toContain('name="description" content="Test desc"');
     expect(html).toContain('property="og:title" content="Test Title"');
     expect(html).toContain('<p>body</p>');
+    expect(html).toContain('class="dotted-trail-cursor"');
   });
 });
