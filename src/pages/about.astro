@@ -1,9 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Button from '../components/Button.astro';
-import { getByPlacement } from '../data/projects';
 
-const alsoBuilt = getByPlacement('about');
 const skills = ['Next.js', 'Astro', 'TypeScript', 'AI SDK / LLMs', 'Neon / Postgres', 'Tailwind', 'Vercel'];
 ---
 <BaseLayout title="About - Bhavyaveer" description="About Bhavyaveer.">
@@ -19,9 +16,6 @@ const skills = ['Next.js', 'Astro', 'TypeScript', 'AI SDK / LLMs', 'Neon / Postg
         {skills.map((s) => (
           <span class="border border-ink px-3 py-1 text-xs uppercase tracking-wide">{s}</span>
         ))}
-      </div>
-      <div class="mt-8">
-        <Button href="/resume.pdf">Download résumé</Button>
       </div>
     </div>
   </section>

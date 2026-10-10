@@ -11,5 +11,7 @@ describe('Nav', () => {
     expect(html).toContain('href="/about"');
     expect(html).toContain('href="/contact"');
     expect(html).toContain('Bhavyaveer');
+    expect(html).toContain('text-vermilion');
+    expect(html).toContain('md:text-lg');
   });
 });

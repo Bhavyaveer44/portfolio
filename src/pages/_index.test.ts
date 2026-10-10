@@ -11,5 +11,6 @@ describe('home page', () => {
       expect(html).toContain(name);
     }
     expect(html).toContain('8 more shipped projects');
+    expect(html).not.toContain('href="/resume.pdf"');
   });
 });
