@@ -31,7 +31,6 @@
     idleDelay: 30,
     idleFade: 510,
     backgroundColor: '#ffffff',
-    dotColor: '#d1d1d1',
     activeDotColor: '#ffffff',
     dotSpacing: 24,
     dotRadius: 0.2,
@@ -79,16 +78,6 @@
         ? Math.max(0, 1 - (idle - settings.idleDelay) / settings.idleFade)
         : 1;
       const visible = active ? fade : 0;
-
-      context.fillStyle = settings.dotColor;
-      for (let y = settings.dotSpacing / 2; y < height; y += settings.dotSpacing) {
-        for (let x = settings.dotSpacing / 2; x < width; x += settings.dotSpacing) {
-          context.globalAlpha = 0.58;
-          context.beginPath();
-          context.arc(x, y, Math.max(1, settings.dotRadius * 4), 0, Math.PI * 2);
-          context.fill();
-        }
-      }
 
       if (visible > 0) {
         for (let i = trail.length - 1; i >= 0; i -= 1) {

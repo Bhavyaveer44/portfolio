@@ -12,6 +12,12 @@ describe('projects data', () => {
     }
   });
 
+  it('every project with a live demo has a screenshot path', () => {
+    for (const project of projects.filter((item) => item.liveUrl)) {
+      expect(project.image, project.slug).toBeTruthy();
+    }
+  });
+
   it('has exactly 6 home projects in the requested order', () => {
     const heroes = getByPlacement('hero');
     expect(heroes.map((p) => p.slug)).toEqual([
