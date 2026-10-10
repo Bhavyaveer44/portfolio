@@ -1,0 +1,125 @@
+---
+import { stack, languages } from '../data/stack';
+
+interface Props { defaultIndex?: number }
+const { defaultIndex = 2 } = Astro.props;
+
+// Isometric geometry (2:1 rhombus plates)
+const CX = 150, HW = 130, HH = 65, T = 8, Y0 = 105, GAP = 50, E = 30;
+const pad = (n: number) => String(n + 1).padStart(2, '0');
+const dyFor = (i: number) => (i < defaultIndex ? -E : i > defaultIndex ? E : 0);
+
+const plates = stack.map((layer, i) => {
+  const cy = Y0 + i * GAP;
+  const top = `${CX},${cy - HH} ${CX + HW},${cy} ${CX},${cy + HH} ${CX - HW},${cy}`;
+  const k = 0.55;
+  const inner = `${CX},${cy - HH * k} ${CX + HW * k},${cy} ${CX},${cy + HH * k} ${CX - HW * k},${cy}`;
+  const left = `${CX - HW},${cy} ${CX},${cy + HH} ${CX},${cy + HH + T} ${CX - HW},${cy + T}`;
+  const right = `${CX},${cy + HH} ${CX + HW},${cy} ${CX + HW},${cy + T} ${CX},${cy + HH + T}`;
+  return { layer, i, cy, top, inner, left, right };
+});
+---
+<div data-stack data-default={defaultIndex} class="grid items-center gap-8 md:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
+  <figure class="m-0">
+    <svg viewBox="0 0 590 470" role="group" aria-label="Interactive stack diagram: select a layer to see its tools" class="mx-auto w-full max-w-[590px] select-none">
+      {plates.slice().reverse().map(({ layer, i, cy, top, inner, left, right }) => (
+        <g
+          class:list={['layer', { active: i === defaultIndex }]}
+          data-layer={i}
+          role="button"
+          tabindex="0"
+          aria-pressed={i === defaultIndex ? 'true' : 'false'}
+          aria-label={`${layer.name} layer, ${layer.items.length} tools`}
+          transform={`translate(0 ${dyFor(i)})`}
+          style={`transform: translateY(${dyFor(i)}px)`}
+        >
+          <g class="plate">
+            <polygon class="side" points={left} />
+            <polygon class="side" points={right} />
+            <polygon class="top" points={top} />
+            <polygon class="inner" points={inner} />
+            <line class="leader" x1={CX + HW} y1={cy} x2={CX + HW + 16} y2={cy} />
+            <text class="num" x={CX + HW + 24} y={cy + 5}>{pad(i)}</text>
+            <text class="name" x={CX + HW + 50} y={cy + 6}>{layer.name}</text>
+          </g>
+        </g>
+      ))}
+    </svg>
+    <figcaption class="mt-2 text-left text-[0.65rem] uppercase tracking-[0.2em] text-ink/50">
+      One system, six connected layers - tap a layer
+    </figcaption>
+  </figure>
+
+  <div aria-live="polite">
+    {stack.map((layer, i) => (
+      <section data-panel={i} hidden={i !== defaultIndex}>
+        <p class="font-display text-sm font-bold text-vermilion">{pad(i)}</p>
+        <h3 class="mt-1 text-3xl font-bold">{layer.name}</h3>
+        <p class="mt-1 text-xs uppercase tracking-widest text-ink/50">{layer.items.length} tools</p>
+        <ul class="mt-5 flex flex-wrap gap-2">
+          {layer.items.map((item) => (
+            <li class="border border-ink/40 px-3 py-1 text-sm">{item}</li>
+          ))}
+        </ul>
+      </section>
+    ))}
+    <p class="mt-8 border-t border-ink pt-4 text-xs uppercase tracking-widest text-ink/50">
+      Languages: <span class="normal-case tracking-normal text-ink/80">{languages.join(' · ')}</span>
+    </p>
+  </div>
+</div>
+
+<style>
+  .layer { cursor: pointer; outline: none; transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .plate { transition: transform 0.25s ease; }
+  .layer:hover .plate { transform: translateY(-5px); }
+  .top { fill: var(--color-cream); stroke: var(--color-ink); stroke-width: 1.25; stroke-linejoin: round; transition: fill 0.25s, stroke 0.25s; }
+  .side { fill: color-mix(in srgb, var(--color-ink) 9%, var(--color-cream)); stroke: var(--color-ink); stroke-width: 1.25; stroke-linejoin: round; }
+  .inner { fill: none; stroke: var(--color-ink); stroke-width: 1; opacity: 0.2; transition: opacity 0.25s, stroke 0.25s; }
+  .leader { stroke: var(--color-ink); stroke-width: 1; opacity: 0.35; }
+  .num { font: 700 12px var(--font-display); fill: var(--color-vermilion); }
+  .name { font: 700 18px var(--font-display); fill: var(--color-ink); letter-spacing: -0.01em; transition: fill 0.25s; }
+  .layer.active .top { fill: color-mix(in srgb, var(--color-vermilion) 14%, var(--color-cream)); stroke: var(--color-vermilion); stroke-width: 2; }
+  .layer.active .inner { stroke: var(--color-vermilion); opacity: 0.7; }
+  .layer.active .name { fill: var(--color-vermilion); }
+  .layer:focus-visible .top { stroke: var(--color-vermilion); stroke-width: 2.5; stroke-dasharray: 5 3; }
+  @media (prefers-reduced-motion: reduce) { .layer, .plate { transition: none; } }
+</style>
+
+<script>
+  const E = 30;
+  document.querySelectorAll<HTMLElement>('[data-stack]').forEach((root) => {
+    const layers = [...root.querySelectorAll<SVGGElement>('[data-layer]')];
+    const panels = [...root.querySelectorAll<HTMLElement>('[data-panel]')];
+    const byIndex = <T extends Element>(list: T[], attr: string) =>
+      list.sort((a, b) => Number(a.getAttribute(attr)) - Number(b.getAttribute(attr)));
+    byIndex(layers, 'data-layer');
+    byIndex(panels, 'data-panel');
+
+    const select = (s: number) => {
+      layers.forEach((g, i) => {
+        const dy = i < s ? -E : i > s ? E : 0;
+        g.style.transform = `translateY(${dy}px)`;
+        g.classList.toggle('active', i === s);
+        g.setAttribute('aria-pressed', String(i === s));
+      });
+      panels.forEach((p, i) => { p.hidden = i !== s; });
+    };
+
+    layers.forEach((g) => {
+      const i = Number(g.dataset.layer);
+      g.addEventListener('click', () => select(i));
+      g.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(i); }
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          const n = Math.min(layers.length - 1, Math.max(0, i + (e.key === 'ArrowDown' ? 1 : -1)));
+          select(n);
+          layers[n].focus();
+        }
+      });
+    });
+
+    select(Number(root.dataset.default ?? 0));
+  });
+</script>
