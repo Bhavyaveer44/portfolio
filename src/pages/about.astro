@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import StackLayers from '../components/StackLayers.astro';
-
+import AgentLoop from '../components/AgentLoop.astro';
 ---
 <BaseLayout title="About - Bhavyaveer" description="About Bhavyaveer and the systems, tools, and technologies he works with.">
   <section class="grid gap-10 border-b border-ink px-6 py-10 md:grid-cols-[280px_1fr] md:px-10 md:py-14">
@@ -39,33 +39,52 @@ import StackLayers from '../components/StackLayers.astro';
   </section>
 
   <section class="px-6 py-8 md:px-10 md:py-12">
-    <SectionHeading title="What I do" index="01" />
-    <div class="flex flex-col items-start">
-      <p class="mt-5 max-w-prose text-lg leading-relaxed text-ink/80">
-        I build AI-powered software, focusing primarily on agentic systems: 
-        LLMs that plan, call tools, and coordinate with each other to complete complex workflows. 
-        That spans across full-stack applications, robust backends, and the core model layer.
-      </p>
+    <div class="grid items-start gap-10 md:grid-cols-[1fr_360px]">
+      <!-- Left Column: Heading + Content -->
+      <div class="flex flex-col items-start">
+        <SectionHeading title="What I do & what I'm building"/>
+        
+        <p class="mt-5 max-w-prose text-lg leading-relaxed text-ink/80">
+          I build AI-powered software, focusing primarily on agentic systems: 
+          LLMs that plan, call tools, and coordinate with each other to complete complex workflows. 
+          That spans across full-stack applications, robust backends, and the core model layer.
+        </p>
+
+        <p class="mt-6 max-w-prose text-lg leading-relaxed text-ink/80">
+          Beyond web apps, I’m going deeper into the systems and evaluation side of AI:
+        </p>
+
+        <ul class="mt-3 list-disc space-y-2 pl-5 max-w-prose text-base leading-relaxed text-ink/80">
+          <li>A multi-provider LLM gateway in Go, featuring caching, routing, and rate limiting.</li>
+          <li>An evaluation harness for regression-testing prompts.</li>
+          <li>An MLOps pipeline for fraud detection.</li>
+          <li>A voice-driven AI agent.</li>
+          <li>An AI powered vocabulary vault.</li>
+          <li>A sandboxed online code-execution service.</li>
+          <li>A CI/CD for a microservices app</li>
+        </ul>
+      </div>
+
+      <!-- Right Column: Agent Loop aligned to top -->
+      <div>
+        <AgentLoop />
+      </div>
     </div>
   </section>
 
   <section class="px-6 py-8 md:px-10 md:py-12">
-    <SectionHeading title="What I’m building and learning now" index="02" />
-    <div class="flex flex-col items-start">
-    <p class="mt-5 list-disc space-y-2 max-w-prose text-lg leading-relaxed text-ink/80">Beyond web apps, I’m going deeper into the systems and evaluation side of AI:</p>
-      <ul class="mt-5 list-disc space-y-2 pl-5 max-w-prose text-lg leading-relaxed text-ink/80">
-        <li>A multi-provider LLM gateway in Go, featuring caching, routing, and rate limiting.</li>
-        <li>A sandboxed online code-execution service.</li>
-        <li>An evaluation harness for regression-testing prompts.</li>
-        <li>An MLOps pipeline for fraud detection.</li>
-        <li>A voice-driven AI agent.</li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="px-6 py-8 md:px-10 md:py-12">
-    <SectionHeading title="Tech Stack" index="03" />
+    <SectionHeading title="Tech Stack"/>
     <StackLayers />
   </section>
 
+  <section class="px-6 py-8 md:px-10 md:py-12">
+    <SectionHeading title="Outside the code"/>
+    <div class="flex flex-col items-start">
+      <p class="mt-5 max-w-prose text-lg leading-relaxed text-ink/80">
+        Away from the terminal, I channel creativity into producing trap beats, capturing landscape photography, and experimenting with cooking. 
+        To keep my mind sharp, I enjoy reading books and solving complex puzzles. I also study financial systems and robotics, 
+        play football, and travel to gain fresh perspectives. 
+      </p>
+    </div>
+  </section>
 </BaseLayout>
