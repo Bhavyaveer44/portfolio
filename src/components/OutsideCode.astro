@@ -1,0 +1,265 @@
+---
+import { interests } from '../data/interests';
+const pad = (n: number) => String(n + 1).padStart(2, '0');
+---
+<section data-cube class="border border-ink bg-cream p-2.5 md:p-3" aria-label="Outside the code: interactive cube">
+  <div data-wrap class="relative h-[80px] w-full cursor-grab touch-none">
+    <canvas data-canvas class="block h-full w-full" aria-label="3D cube. Click to pop the object out, drag to spin."></canvas>
+    <p class="pointer-events-none absolute inset-x-0 bottom-0 text-center text-[0.45rem] uppercase tracking-[0.1em] text-ink/40">Click to pop · Drag to spin</p>
+  </div>
+  <div class="mt-1 border-t border-ink pt-1.5">
+    <div class="flex items-start justify-between gap-2">
+      <div>
+        <p data-num class="font-display text-[0.6rem] font-bold text-vermilion">{pad(0)}</p>
+        <p data-name class="font-display text-sm font-bold leading-tight">{interests[0].name}</p>
+      </div>
+      <button type="button" data-pop class="bg-ink px-2 py-0.5 text-[0.6rem] font-bold text-cream hover:bg-vermilion shrink-0">Pop out</button>
+    </div>
+    <p data-line class="mt-1 text-[0.65rem] italic text-ink/70 leading-snug">{interests[0].line}</p>
+    <div class="mt-2 grid grid-cols-3 gap-1">
+      {interests.map((it, i) => (
+        <button type="button" data-chip={i} data-line={it.line} class="border border-ink px-0.5 py-0.5 text-[0.55rem] text-center truncate hover:border-vermilion hover:text-vermilion">{it.name}</button>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  // @ts-nocheck
+  const NAMES = [...document.querySelectorAll('[data-chip]')].map((c) => c.textContent);
+  const TG = [[0, 0], [0, -90], [0, 180], [0, 90], [90, 0], [-90, 0]];
+  const NRM = [[0, 0, 1], [1, 0, 0], [0, 0, -1], [-1, 0, 0], [0, 1, 0], [0, -1, 0]];
+  const V = 0xff3b00, VD = 0xb82800, W = 0xffffff;
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const smooth = (x) => { x = clamp(x, 0, 1); return x * x * (3 - 2 * x); };
+
+  function icon(i) {
+    const s = 256, cv = document.createElement('canvas');
+    cv.width = cv.height = s;
+    const x = cv.getContext('2d');
+    x.strokeStyle = '#ff3b00'; x.lineWidth = 7; x.lineCap = 'round'; x.lineJoin = 'round';
+    x.beginPath();
+    if (i === 0) {
+      x.arc(128, 128, 68, 0, Math.PI * 2); x.stroke(); x.beginPath();
+      for (let k = 0; k < 5; k++) { const a = -Math.PI / 2 + (k * 2 * Math.PI) / 5; const px = 128 + 26 * Math.cos(a), py = 128 + 26 * Math.sin(a); k ? x.lineTo(px, py) : x.moveTo(px, py); }
+      x.closePath(); x.stroke(); x.beginPath();
+      for (let k = 0; k < 5; k++) { const b = -Math.PI / 2 + (k * 2 * Math.PI) / 5; x.moveTo(128 + 26 * Math.cos(b), 128 + 26 * Math.sin(b)); x.lineTo(128 + 66 * Math.cos(b), 128 + 66 * Math.sin(b)); }
+      x.stroke();
+    } else if (i === 1) {
+      const hs = [34, 76, 52, 108, 64, 88, 40]; x.lineWidth = 11;
+      hs.forEach((h, j) => { const bx = 46 + j * 27; x.moveTo(bx, 128 - h / 2); x.lineTo(bx, 128 + h / 2); });
+      x.stroke();
+    } else if (i === 2) {
+      x.moveTo(60, 92); x.lineTo(104, 92); x.lineTo(114, 72); x.lineTo(142, 72); x.lineTo(152, 92); x.lineTo(196, 92);
+      x.quadraticCurveTo(212, 92, 212, 108); x.lineTo(212, 172); x.quadraticCurveTo(212, 188, 196, 188); x.lineTo(60, 188);
+      x.quadraticCurveTo(44, 188, 44, 172); x.lineTo(44, 108); x.quadraticCurveTo(44, 92, 60, 92); x.stroke();
+      x.beginPath(); x.arc(128, 136, 30, 0, Math.PI * 2); x.stroke();
+      x.beginPath(); x.arc(128, 136, 11, 0, Math.PI * 2); x.stroke();
+      x.beginPath(); x.moveTo(176, 110); x.lineTo(194, 110); x.stroke();
+    } else if (i === 3) {
+      x.rect(78, 48, 100, 160); x.stroke();
+      x.beginPath(); x.moveTo(98, 48); x.lineTo(98, 208); x.stroke();
+      x.beginPath(); x.moveTo(116, 94); x.lineTo(160, 94); x.moveTo(116, 114); x.lineTo(154, 114); x.stroke();
+      x.beginPath(); x.moveTo(148, 208); x.lineTo(148, 232); x.lineTo(158, 224); x.lineTo(168, 232); x.lineTo(168, 208); x.stroke();
+    } else if (i === 4) {
+      x.lineWidth = 5; x.globalAlpha = 0.5; x.moveTo(36, 206); x.lineTo(220, 206); x.stroke();
+      x.globalAlpha = 1; x.lineWidth = 7; x.beginPath();
+      x.moveTo(40, 176); x.lineTo(84, 134); x.lineTo(116, 154); x.lineTo(156, 92); x.lineTo(190, 110); x.lineTo(218, 58); x.stroke();
+      x.beginPath(); x.moveTo(190, 58); x.lineTo(218, 58); x.lineTo(218, 86); x.stroke();
+    } else {
+      x.save(); x.translate(128, 128); x.rotate(Math.PI / 4); x.scale(2.4, 2.4); x.translate(-50, -50); x.lineWidth = 7 / 2.4;
+      x.stroke(new Path2D('M50 18 55 42 82 56V62L55 54 53 74 60 80V84L50 81 40 84V80L47 74 45 54 18 62V56L45 42Z')); x.restore();
+    }
+    return cv;
+  }
+
+  async function init(root) {
+    const THREE = await import('three');
+    const wrap = root.querySelector('[data-wrap]');
+    const canvas = root.querySelector('[data-canvas]');
+    const chips = [...root.querySelectorAll('[data-chip]')];
+    const popBtn = root.querySelector('[data-pop]');
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    } catch {
+      canvas.hidden = true;
+      return;
+    }
+    renderer.setClearColor(0x000000, 0);
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 50);
+    camera.position.set(0, 1.1, 8.2); camera.lookAt(0, -0.05, 0);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+    const dl = new THREE.DirectionalLight(0xffffff, 0.85); dl.position.set(3, 5, 6); scene.add(dl);
+
+    const boxGeo = new THREE.BoxGeometry(2, 2, 2);
+    const cube = new THREE.Mesh(boxGeo, [0, 1, 2, 3, 4, 5].map(() => new THREE.MeshBasicMaterial({ color: 0xffffff })));
+    cube.add(new THREE.LineSegments(new THREE.EdgesGeometry(boxGeo), new THREE.LineBasicMaterial({ color: 0x111111 })));
+    const FACES = [
+      [[0, 0, 1.004], [0, 0, 0]],
+      [[1.004, 0, 0], [0, Math.PI / 2, 0]],
+      [[0, 0, -1.004], [0, Math.PI, 0]],
+      [[-1.004, 0, 0], [0, -Math.PI / 2, 0]],
+      [[0, 1.004, 0], [-Math.PI / 2, 0, 0]],
+      [[0, -1.004, 0], [Math.PI / 2, 0, 0]],
+    ];
+    const overlays = FACES.map(([pos, rot], i) => {
+      const tex = new THREE.CanvasTexture(icon(i)); tex.anisotropy = 4;
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false }));
+      m.position.set(...pos); m.rotation.set(...rot); cube.add(m);
+      return m;
+    });
+    scene.add(cube);
+    const shadow = new THREE.Mesh(new THREE.CircleGeometry(1.15, 40), new THREE.MeshBasicMaterial({ color: 0x111111, transparent: true, opacity: 0.12 }));
+    shadow.rotation.x = -Math.PI / 2; shadow.position.y = -1.9; scene.add(shadow);
+
+    const M = (c) => new THREE.MeshStandardMaterial({ color: c, flatShading: true, roughness: 0.55, metalness: 0 });
+    const box = (w, h, d, c, x = 0, y = 0, z = 0) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), M(c)); m.position.set(x, y, z); return m; };
+    const cyl = (r1, r2, h, c, x = 0, y = 0, z = 0, rx = 0, rz = 0) => { const m = new THREE.Mesh(new THREE.CylinderGeometry(r1, r2, h, 24), M(c)); m.position.set(x, y, z); m.rotation.x = rx; m.rotation.z = rz; return m; };
+
+    const objs = [];
+    {
+      const g = new THREE.Group(), bg = new THREE.IcosahedronGeometry(0.82, 1);
+      g.add(new THREE.Mesh(bg, M(V)));
+      g.add(new THREE.LineSegments(new THREE.EdgesGeometry(bg), new THREE.LineBasicMaterial({ color: 0xffffff })));
+      objs.push(g);
+    }
+    {
+      const g = new THREE.Group(); g.userData.bars = [];
+      for (let k = 0; k < 7; k++) { const b = box(0.17, 1, 0.17, V, -0.84 + k * 0.28); g.add(b); g.userData.bars.push(b); }
+      objs.push(g);
+    }
+    {
+      const g = new THREE.Group();
+      g.add(box(1.5, 0.95, 0.6, V)); g.add(box(0.5, 0.18, 0.3, V, -0.3, 0.56));
+      g.add(cyl(0.4, 0.4, 0.12, VD, 0, -0.02, 0.34, Math.PI / 2)); g.add(cyl(0.3, 0.3, 0.34, VD, 0, -0.02, 0.46, Math.PI / 2));
+      g.add(cyl(0.2, 0.2, 0.05, W, 0, -0.02, 0.65, Math.PI / 2)); g.add(box(0.22, 0.12, 0.08, W, 0.55, 0.3, 0.31));
+      objs.push(g);
+    }
+    {
+      const g = new THREE.Group();
+      g.add(box(0.98, 1.38, 0.04, V, 0, 0, 0.14)); g.add(box(0.98, 1.38, 0.04, V, 0, 0, -0.14)); g.add(box(0.07, 1.38, 0.32, VD, -0.5));
+      g.add(box(0.9, 1.3, 0.24, W, 0.02)); g.add(box(0.06, 0.5, 0.015, VD, 0.2, -0.9, 0.12));
+      objs.push(g);
+    }
+    {
+      const g = new THREE.Group(), hs = [0.4, 0.7, 0.55, 1.0, 1.4];
+      g.userData.hs = hs; g.userData.bars = [];
+      hs.forEach((_, s) => { const b = box(0.22, 1, 0.22, V, -0.64 + s * 0.32, -0.7); g.add(b); g.userData.bars.push(b); });
+      const cone = new THREE.Mesh(new THREE.ConeGeometry(0.15, 0.32, 16), M(VD)); cone.position.set(0.64, 0.9, 0);
+      g.add(cone); g.userData.cone = cone;
+      objs.push(g);
+    }
+    {
+      const g = new THREE.Group(), p = new THREE.Group();
+      p.add(cyl(0.12, 0.12, 1.5, V, 0, 0, 0, 0, Math.PI / 2)); p.add(cyl(0, 0.12, 0.34, V, 0.92, 0, 0, 0, -Math.PI / 2));
+      p.add(box(0.5, 0.04, 1.9, V, 0.05)); p.add(box(0.26, 0.03, 0.7, V, -0.66)); p.add(box(0.28, 0.36, 0.03, V, -0.68, 0.2));
+      const cp = new THREE.Mesh(new THREE.SphereGeometry(0.1, 12, 8), M(W)); cp.position.set(0.4, 0.1, 0); p.add(cp);
+      g.add(p); objs.push(g);
+    }
+    objs.forEach((o) => { o.visible = false; scene.add(o); });
+
+    const numEl = root.querySelector('[data-num]'), nameEl = root.querySelector('[data-name]'), lineEl = root.querySelector('[data-line]');
+    const ACTIVE = ['border-vermilion', 'bg-vermilion/10', 'text-vermilion'];
+    let rx = -18, ry = -30, vx = 0, vy = 0, mode = 'idle', holdT = 0, tgt = TG[0], shown = -1, popIdx = 0, want = false, p = 0, pv = 0;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const front = (a, b) => {
+      const A = (a * Math.PI) / 180, B = (b * Math.PI) / 180; let best = 0, bz = -9;
+      NRM.forEach((n, i) => { const z1 = -n[0] * Math.sin(B) + n[2] * Math.cos(B); const z2 = n[1] * Math.sin(A) + z1 * Math.cos(A); if (z2 > bz) { bz = z2; best = i; } });
+      return best;
+    };
+    const show = (i) => {
+      if (i === shown) return; shown = i;
+      chips.forEach((c, k) => ACTIVE.forEach((cl) => c.classList.toggle(cl, k === i)));
+      numEl.textContent = String(i + 1).padStart(2, '0'); 
+      nameEl.textContent = NAMES[i];
+      if (lineEl) lineEl.textContent = chips[i].dataset.line || '';
+    };
+    const snapTo = (i) => { tgt = TG[i]; mode = 'snap'; };
+    const togglePop = (was) => { if (was) want = false; else { want = true; if (mode === 'idle' || mode === 'inertia') snapTo(front(rx, ry)); } };
+    chips.forEach((c, i) => c.addEventListener('click', () => { want = false; snapTo(i); }));
+    popBtn.addEventListener('click', () => togglePop(want));
+
+    let down = false, moved = false, sx = 0, sy = 0, lx = 0, ly = 0, wasWant = false;
+    const ray = new THREE.Raycaster(), mp = new THREE.Vector2();
+    wrap.addEventListener('pointerdown', (e) => { down = true; moved = false; sx = lx = e.clientX; sy = ly = e.clientY; wasWant = want; wrap.setPointerCapture(e.pointerId); });
+    wrap.addEventListener('pointermove', (e) => {
+      if (!down) return;
+      if (!moved && Math.hypot(e.clientX - sx, e.clientY - sy) > 5) { moved = true; mode = 'drag'; want = false; vx = vy = 0; }
+      if (!moved) return;
+      const dx = e.clientX - lx, dy = e.clientY - ly; lx = e.clientX; ly = e.clientY;
+      ry += dx * 0.6; rx = clamp(rx + dy * 0.6, -90, 90); vy = dx * 0.6; vx = dy * 0.6;
+    });
+    wrap.addEventListener('pointerup', (e) => {
+      if (!down) return; down = false;
+      if (moved) { mode = 'inertia'; return; }
+      const r = canvas.getBoundingClientRect();
+      mp.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+      ray.setFromCamera(mp, camera);
+      if (ray.intersectObject(cube).length || (p > 0.3 && ray.intersectObject(objs[popIdx], true).length)) togglePop(wasWant);
+    });
+    wrap.addEventListener('pointercancel', () => { down = false; });
+
+    const resize = () => {
+      const w = wrap.clientWidth, h = wrap.clientHeight;
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+    };
+    new ResizeObserver(resize).observe(wrap); resize();
+
+    let visible = true, running = false, last = performance.now();
+    const T0 = last;
+    const frame = (now) => {
+      if (!visible) { running = false; return; }
+      const dt = Math.min((now - last) / 1000, 0.05), t = (now - T0) / 1000; last = now;
+      if (mode === 'idle') { if (!reduce) { ry += 16 * dt; rx += (-18 - rx) * Math.min(1, dt * 2); } show(front(rx, ry)); }
+      else if (mode === 'inertia') { ry += vy * dt * 60; rx = clamp(rx + vx * dt * 60, -90, 90); vx *= 0.94; vy *= 0.94; if (Math.abs(vx) + Math.abs(vy) < 0.15) snapTo(front(rx, ry)); }
+      else if (mode === 'snap') {
+        const ty = tgt[1] + 360 * Math.round((ry - tgt[1]) / 360);
+        rx += (tgt[0] - rx) * Math.min(1, dt * 9); ry += (ty - ry) * Math.min(1, dt * 9);
+        if (Math.abs(tgt[0] - rx) < 0.2 && Math.abs(ty - ry) < 0.2) { rx = tgt[0]; ry = ty; mode = 'hold'; holdT = 0; show(front(rx, ry)); }
+      } else if (mode === 'hold') { if (want || p > 0.02) holdT = 0; else holdT += dt; if (holdT > 4 && !reduce) mode = 'idle'; }
+
+      const bob = reduce ? 0 : Math.sin(t * 1.7) * 0.09;
+      cube.position.y = bob; cube.rotation.set((rx * Math.PI) / 180, (ry * Math.PI) / 180, 0);
+      shadow.scale.setScalar(1 - bob * 0.9); shadow.material.opacity = 0.12 - bob * 0.25;
+
+      const target = want && mode === 'hold' ? 1 : 0;
+      if (reduce) { p = target; pv = 0; } else { pv += ((target - p) * 150 - pv * 11) * dt; p += pv * dt; }
+      if (p < 0.02 && target === 0) popIdx = shown < 0 ? 0 : shown;
+      popBtn.textContent = want ? 'Put back' : 'Pop out';
+
+      overlays.forEach((o, k) => { o.material.opacity = k === popIdx ? 1 - smooth(p / 0.45) : 1; });
+
+      objs.forEach((o, k) => { o.visible = k === popIdx && p > 0.01; });
+      const g = objs[popIdx];
+      if (g.visible) {
+        g.position.set(0, bob, 1.15 + Math.max(p, 0) * 1.35);
+        g.scale.setScalar(Math.max(0.01, (0.15 + 0.85 * p) * 0.88));
+        if (popIdx === 0) g.rotation.set(0.3, t * 0.9, 0);
+        else if (popIdx === 1) { g.userData.bars.forEach((b, k) => { b.scale.y = (0.3 + 0.7 * Math.abs(Math.sin(t * 3 + k * 0.8))) * 1.6; }); g.rotation.set(0, Math.sin(t * 0.8) * 0.5, 0); }
+        else if (popIdx === 2) g.rotation.set(-0.1, Math.sin(t * 0.9) * 0.6, 0);
+        else if (popIdx === 3) g.rotation.set(0.25, t * 0.8, 0);
+        else if (popIdx === 4) {
+          const hs = g.userData.hs;
+          g.userData.bars.forEach((b, k) => { const h = Math.max(0.001, hs[k] * clamp(p * 1.4 - k * 0.15, 0, 1)); b.scale.y = h; b.position.y = -0.7 + h / 2; });
+          g.userData.cone.position.y = -0.7 + hs[4] * clamp(p * 1.4 - 0.6, 0, 1) + 0.2; g.userData.cone.visible = p > 0.7;
+          g.rotation.set(-0.15, Math.sin(t * 0.8) * 0.55, 0);
+        } else g.rotation.set(Math.sin(t * 1.5) * 0.15, t * 0.7, 0.35);
+      }
+      renderer.render(scene, camera);
+      requestAnimationFrame(frame);
+    };
+    const start = () => { if (running) return; running = true; last = performance.now(); requestAnimationFrame(frame); };
+    show(front(rx, ry));
+    new IntersectionObserver(([en]) => { visible = en.isIntersecting; if (visible) start(); }).observe(root);
+    start();
+  }
+
+  document.querySelectorAll('[data-cube]').forEach((root) => {
+    const io = new IntersectionObserver(([en]) => { if (en.isIntersecting) { io.disconnect(); init(root); } }, { rootMargin: '200px' });
+    io.observe(root);
+  });
+</script>

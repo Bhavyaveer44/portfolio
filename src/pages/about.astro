@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import StackLayers from '../components/StackLayers.astro';
 import AgentLoop from '../components/AgentLoop.astro';
+import OutsideCode from '../components/OutsideCode.astro';
 ---
 <BaseLayout title="About - Bhavyaveer" description="About Bhavyaveer and the systems, tools, and technologies he works with.">
   <section class="grid gap-10 border-b border-ink px-6 py-10 md:grid-cols-[280px_1fr] md:px-10 md:py-14">
@@ -42,7 +43,7 @@ import AgentLoop from '../components/AgentLoop.astro';
     <div class="grid items-start gap-10 md:grid-cols-[1fr_360px]">
       <!-- Left Column: Heading + Content -->
       <div class="flex flex-col items-start">
-        <SectionHeading title="What I do & what I'm building"/>
+        <SectionHeading title="What I do & what I'm building" />
         
         <p class="mt-5 max-w-prose text-lg leading-relaxed text-ink/80">
           I build AI-powered software, focusing primarily on agentic systems: 
@@ -73,18 +74,26 @@ import AgentLoop from '../components/AgentLoop.astro';
   </section>
 
   <section class="px-6 py-8 md:px-10 md:py-12">
-    <SectionHeading title="Tech Stack"/>
+    <SectionHeading title="Tech Stack" />
     <StackLayers />
   </section>
 
   <section class="px-6 py-8 md:px-10 md:py-12">
-    <SectionHeading title="Outside the code"/>
-    <div class="flex flex-col items-start">
-      <p class="mt-5 max-w-prose text-lg leading-relaxed text-ink/80">
-        Away from the terminal, I channel creativity into producing trap beats, capturing landscape photography, and experimenting with cooking. 
-        To keep my mind sharp, I enjoy reading books and solving complex puzzles. I also study financial systems and robotics, 
-        play football, and travel to gain fresh perspectives. 
-      </p>
+    <div class="grid items-start gap-10 md:grid-cols-[1fr_380px]">
+      <!-- Left Column: Text description -->
+      <div class="flex flex-col items-start">
+        <SectionHeading title="Outside the code" />
+        <p class="mt-5 max-w-prose text-lg leading-relaxed text-ink/80">
+          Away from the terminal, I channel creativity into producing trap beats and capturing landscape photography. 
+          To keep my mind sharp, I enjoy reading books and solving complex puzzles. I also study financial systems and robotics, 
+          play football, and travel to gain fresh perspectives.
+        </p>
+      </div>
+
+      <!-- Right Column: Interactive Cube Component -->
+      <div>
+        <OutsideCode />
+      </div>
     </div>
   </section>
 </BaseLayout>
