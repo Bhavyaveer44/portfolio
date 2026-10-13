@@ -69,6 +69,9 @@ const nodes = loopSteps.map((step, i) => {
     const steps = [...root.querySelectorAll<HTMLElement>('[data-step]')]
       .sort((a, b) => Number(a.dataset.step) - Number(b.dataset.step));
     const dot = root.querySelector<SVGCircleElement>('.dot')!;
+    const boxes = nodes.map((node) => node.querySelector<SVGRectElement>('rect')!);
+    const dotRadius = dot.r.baseVal.value;
+    const fadeDistance = 12;
     const period = Number(root.dataset.period ?? 9) * 1000;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let current = Number(root.dataset.default ?? 0);
@@ -77,6 +80,14 @@ const nodes = loopSteps.map((step, i) => {
       dot.setAttribute('cx', String(CX + R * Math.cos(a)));
       dot.setAttribute('cy', String(CY + R * Math.sin(a)));
     };
+    const stageOpacity = (x: number, y: number) => Math.min(...boxes.map((box) => {
+      const left = box.x.baseVal.value;
+      const top = box.y.baseVal.value;
+      const dx = Math.max(left - x, 0, x - (left + box.width.baseVal.value));
+      const dy = Math.max(top - y, 0, y - (top + box.height.baseVal.value));
+      const clearance = Math.hypot(dx, dy) - dotRadius;
+      return Math.max(0, Math.min(1, clearance / fadeDistance));
+    }));
     const nodeAngle = (i: number) => -Math.PI / 2 + (i * TAU) / nodes.length;
 
     const select = (i: number) => {
@@ -111,7 +122,10 @@ const nodes = loopSteps.map((step, i) => {
     const t0 = performance.now();
     const frame = (now: number) => {
       const a = -Math.PI / 2 + (((now - t0) % period) / period) * TAU;
+      const x = CX + R * Math.cos(a);
+      const y = CY + R * Math.sin(a);
       place(a);
+      dot.setAttribute('opacity', String(stageOpacity(x, y)));
       const phase = (((a + Math.PI / 2) % TAU) + TAU) % TAU;
       nodes.forEach((n, k) => {
         const d = Math.abs(phase - (k * TAU) / nodes.length);
