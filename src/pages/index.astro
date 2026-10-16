@@ -28,7 +28,7 @@ const heroes = getByPlacement('hero');
   <!-- SELECTED WORK -->
   <section class="px-6 py-14 md:px-10">
     <div class="mx-auto max-w-6xl">
-      <SectionHeading title="Selected work" index="01 - 06" />
+      <SectionHeading title="Selected work"/>
       {heroes.map((project, i) => <ProjectRowHero project={project} index={i + 1} />)}
       <div class="border-t border-ink"></div>
     </div>

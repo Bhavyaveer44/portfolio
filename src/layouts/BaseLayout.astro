@@ -28,6 +28,20 @@ const og = new URL('/og.png', Astro.site ?? 'https://portfolio-rho-liart-78.verc
     <meta property="og:description" content={description} />
     <meta property="og:image" content={og} />
     <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline>
+      try {
+        const savedTheme = localStorage.getItem('theme');
+        document.documentElement.dataset.theme =
+          savedTheme === 'dark' || savedTheme === 'light'
+            ? savedTheme
+            : window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light';
+      } catch {
+        document.documentElement.dataset.theme =
+          window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+    </script>
     <Analytics />
   </head>
   <body class="bg-cream text-ink antialiased">

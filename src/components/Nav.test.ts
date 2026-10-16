@@ -13,5 +13,7 @@ describe('Nav', () => {
     expect(html).toContain('Bhavyaveer');
     expect(html).toContain('text-vermilion');
     expect(html).toContain('md:text-lg');
+    expect(html).toContain('data-theme-toggle');
+    expect(html).toContain('aria-label="Switch to dark mode"');
   });
 });

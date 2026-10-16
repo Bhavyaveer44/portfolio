@@ -12,12 +12,21 @@
 
 /* Hairline figures - plate MUST equal the page background (cream) */
 :root {
-  --hairline-plate: #f5f2ec;
+  color-scheme: light;
+  --hairline-plate: var(--color-cream);
   --hairline-hi: #ff3b00;
-  --hairline-edge: #111111;
+  --hairline-edge: var(--color-ink);
   --hairline-mid: #6b675f;
   --hairline-lo: #cfc9bd;
   --hairline-stroke: 0.9;
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --color-cream: #171614;
+  --color-ink: #f5f2ec;
+  --hairline-mid: #a9a39a;
+  --hairline-lo: #514d47;
 }
 
 @layer base {
