@@ -180,6 +180,23 @@ export const projects: Project[] = [
     image: '/images/projects/rattafy.png',
     placement: 'grid',
   },
+  {
+    slug: 'lockin',
+    name: 'Lockin',
+    description: 'A deep-work camera coach that watches your focus on-device and debriefs your day. Classifies each moment as focused, distracted, phone or away, saves only state timestamps, and has an LLM write an end-of-day debrief.',
+    tech: [
+      'Next.js 16', 
+      'MediaPipe', 
+      'Groq', 
+      'Clerk', 
+      'Neon', 
+      'Drizzle'
+    ],
+    liveUrl: 'https://lockin-sooty.vercel.app/',
+    repoUrl: 'https://github.com/Bhavyaveer44/lockin',
+    image: '/images/projects/lockin.png',
+    placement: 'grid',
+  },
 ];
 
 export function getByPlacement(placement: Placement): Project[] {
