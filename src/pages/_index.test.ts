@@ -6,7 +6,7 @@ describe('home page', () => {
   it('renders the tagline and all six home projects', async () => {
     const container = await AstroContainer.create();
     const html = await container.renderToString(Index);
-    expect(html).toContain('Engineering intelligent software from the ground up.');
+    expect(html).toContain('Engineering systems that think.');
     for (const name of ['FinScope', 'kvd', 'Collby', 'MockMirror', 'Zenith', 'Hybrag']) {
       expect(html).toContain(name);
     }
