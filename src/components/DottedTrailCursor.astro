@@ -22,8 +22,8 @@
 <script>
   const settings = {
     colorA: '#e34435',
-    colorB: '#e2404e',
-    headRadius: 11,
+    colorB: '#e2404e',
+    headRadius: 13, // Scaled for the crystal shard bounding box
     glowRadius: 20,
     followSpeed: 0.85,
     trailLength: 9,
@@ -38,7 +38,7 @@
     rimOuter: 0.8,
     edgeDesaturate: 0.9,
     edgeDesaturateSpan: 1.5,
-    tailTilt: 0.03,
+    tailTilt: 0.15,
   };
 
   const canvas = document.querySelector<HTMLCanvasElement>('.dotted-trail-cursor');
@@ -80,6 +80,7 @@
       const visible = active ? fade : 0;
 
       if (visible > 0) {
+        // Draw trailing glow
         for (let i = trail.length - 1; i >= 0; i -= 1) {
           const point = trail[i];
           const progress = i / Math.max(1, trail.length - 1);
@@ -95,6 +96,7 @@
           context.fill();
         }
 
+        // Draw dot grid interaction
         const activeRadius = settings.glowRadius * settings.edgeDesaturateSpan;
         for (let y = settings.dotSpacing / 2; y < height; y += settings.dotSpacing) {
           for (let x = settings.dotSpacing / 2; x < width; x += settings.dotSpacing) {
@@ -115,19 +117,53 @@
           }
         }
 
+        // --- CRYSTAL SHARD HEAD ---
         const head = trail[0];
+        const prev = trail[1] || head;
+        const dx = head.x - prev.x;
+        const dy = head.y - prev.y;
+        const motionAngle = Math.atan2(dy, dx);
+        const tilt = motionAngle + Math.PI / 2 + settings.tailTilt;
+
+        context.save();
+        context.translate(head.x, head.y);
+        context.rotate(tilt);
         context.globalAlpha = visible;
+
+        const size = settings.headRadius;
+
+        // Left Shard Facet (Shadow / Darker Face)
         context.fillStyle = settings.colorA;
         context.beginPath();
-        context.arc(head.x, head.y, settings.headRadius, 0, Math.PI * 2);
+        context.moveTo(0, -size * 1.3);     // Top apex
+        context.lineTo(-size * 0.85, 0);    // Left vertex
+        context.lineTo(0, size * 1.1);      // Bottom apex
+        context.closePath();
         context.fill();
 
-        context.globalAlpha = visible * settings.rimInner;
-        context.strokeStyle = settings.backgroundColor;
-        context.lineWidth = 1;
+        // Right Shard Facet (Lit / Highlighted Face)
+        context.fillStyle = settings.colorB;
         context.beginPath();
-        context.arc(head.x, head.y, settings.headRadius - 2, 0, Math.PI * 2);
+        context.moveTo(0, -size * 1.3);     // Top apex
+        context.lineTo(size * 0.85, 0);     // Right vertex
+        context.lineTo(0, size * 1.1);      // Bottom apex
+        context.closePath();
+        context.fill();
+
+        // Central Geometric Ridge & Crisp Shard Border
+        context.strokeStyle = settings.backgroundColor;
+        context.lineWidth = 1.2;
+        context.beginPath();
+        context.moveTo(0, -size * 1.3);
+        context.lineTo(0, size * 1.1);
+        context.moveTo(0, -size * 1.3);
+        context.lineTo(-size * 0.85, 0);
+        context.lineTo(0, size * 1.1);
+        context.lineTo(size * 0.85, 0);
+        context.closePath();
         context.stroke();
+
+        context.restore();
       }
 
       context.globalAlpha = 1;
