@@ -7,6 +7,8 @@ describe('home page', () => {
     const container = await AstroContainer.create();
     const html = await container.renderToString(Index);
     expect(html).toContain('Engineering systems that think.');
+    expect(html).toContain('grid-cols-[minmax(0,1fr)]');
+    expect(html).toContain('home-hero-ascii min-w-0');
     for (const name of ['FinScope', 'kvd', 'Collby', 'MockMirror', 'Zenith', 'Hybrag']) {
       expect(html).toContain(name);
     }
