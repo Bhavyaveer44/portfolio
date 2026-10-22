@@ -2,5 +2,13 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "astro",
   "buildCommand": "astro build",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "portfolio-rho-liart-78.vercel.app" }],
+      "destination": "https://bhavyaveer.vercel.app/:path*",
+      "permanent": true
+    }
+  ]
 }
