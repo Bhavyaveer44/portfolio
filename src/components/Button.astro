@@ -7,8 +7,8 @@ const { href, variant = 'solid' } = Astro.props;
 const base = 'inline-block px-5 py-2.5 text-sm font-bold transition-colors';
 const styles =
   variant === 'solid'
-    ? 'bg-ink text-cream hover:bg-vermilion'
-    : 'border border-ink hover:border-vermilion hover:text-vermilion';
+    ? 'bg-ink text-cream hover:bg-accent'
+    : 'border border-ink hover:border-accent hover:text-accent';
 const external = href.startsWith('http');
 ---
 <a

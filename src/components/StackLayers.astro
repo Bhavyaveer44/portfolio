@@ -53,7 +53,7 @@ const plates = stack.map((layer, i) => {
   <div aria-live="polite">
     {stack.map((layer, i) => (
       <section data-panel={i} hidden={i !== defaultIndex}>
-        <p class="font-display text-sm font-bold text-vermilion">{pad(i)}</p>
+        <p class="font-display text-sm font-bold text-accent">{pad(i)}</p>
         <h3 class="mt-1 text-3xl font-bold">{layer.name}</h3>
         <p class="mt-1 text-xs uppercase tracking-widest text-ink/50">{layer.items.length} tools</p>
         <ul class="mt-5 flex flex-wrap gap-2">
@@ -77,12 +77,12 @@ const plates = stack.map((layer, i) => {
   .side { fill: color-mix(in srgb, var(--color-ink) 9%, var(--color-cream)); stroke: var(--color-ink); stroke-width: 1.25; stroke-linejoin: round; }
   .inner { fill: none; stroke: var(--color-ink); stroke-width: 1; opacity: 0.2; transition: opacity 0.25s, stroke 0.25s; }
   .leader { stroke: var(--color-ink); stroke-width: 1; opacity: 0.35; }
-  .num { font: 700 12px var(--font-display); fill: var(--color-vermilion); }
+  .num { font: 700 12px var(--font-display); fill: var(--color-accent); }
   .name { font: 700 18px var(--font-display); fill: var(--color-ink); letter-spacing: -0.01em; transition: fill 0.25s; }
-  .layer.active .top { fill: color-mix(in srgb, var(--color-vermilion) 14%, var(--color-cream)); stroke: var(--color-vermilion); stroke-width: 2; }
-  .layer.active .inner { stroke: var(--color-vermilion); opacity: 0.7; }
-  .layer.active .name { fill: var(--color-vermilion); }
-  .layer:focus-visible .top { stroke: var(--color-vermilion); stroke-width: 2.5; stroke-dasharray: 5 3; }
+  .layer.active .top { fill: color-mix(in srgb, var(--color-accent) 14%, var(--color-cream)); stroke: var(--color-accent); stroke-width: 2; }
+  .layer.active .inner { stroke: var(--color-accent); opacity: 0.7; }
+  .layer.active .name { fill: var(--color-accent); }
+  .layer:focus-visible .top { stroke: var(--color-accent); stroke-width: 2.5; stroke-dasharray: 5 3; }
   @media (prefers-reduced-motion: reduce) { .layer, .plate { transition: none; } }
 </style>
 

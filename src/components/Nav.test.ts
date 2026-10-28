@@ -11,7 +11,7 @@ describe('Nav', () => {
     expect(html).toContain('href="/about"');
     expect(html).toContain('href="/contact"');
     expect(html).toContain('Bhavyaveer');
-    expect(html).toContain('text-vermilion');
+    expect(html).toContain('flower-gradient-text');
     expect(html).toContain('md:text-lg');
     expect(html).toContain('data-theme-toggle');
     expect(html).toContain('aria-label="Switch to dark mode"');

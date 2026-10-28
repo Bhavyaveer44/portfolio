@@ -20,9 +20,10 @@
 </style>
 
 <script>
+  const theme = getComputedStyle(document.documentElement);
   const settings = {
-    colorA: '#e34435',
-    colorB: '#e2404e',
+    colorA: theme.getPropertyValue('--color-flower-purple').trim(),
+    colorB: theme.getPropertyValue('--color-accent').trim(),
     headRadius: 13, // Scaled for the crystal shard bounding box
     glowRadius: 20,
     followSpeed: 0.85,
@@ -30,8 +31,8 @@
     fadeOnIdle: true,
     idleDelay: 30,
     idleFade: 510,
-    backgroundColor: '#ffffff',
-    activeDotColor: '#ffffff',
+    backgroundColor: theme.getPropertyValue('--color-cream').trim(),
+    activeDotColor: theme.getPropertyValue('--color-ink').trim(),
     dotSpacing: 24,
     dotRadius: 0.2,
     rimInner: 1,

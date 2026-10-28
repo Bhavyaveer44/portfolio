@@ -9,7 +9,7 @@ const num = String(index).padStart(2, '0');
   href={`/projects#${project.slug}`}
   class="fade-up grid grid-cols-[2rem_1fr] items-center gap-5 border-t border-ink py-5 transition-colors hover:bg-ink/[0.03] md:grid-cols-[3rem_1fr_12rem]"
 >
-  <span class="font-display text-sm font-bold text-vermilion">{num}</span>
+  <span class="font-display text-sm font-bold text-accent">{num}</span>
   <div>
     <h3 class="text-xl font-bold md:text-2xl">{project.name}</h3>
     <p class="mt-1 max-w-prose text-sm text-ink/70">{project.description}</p>

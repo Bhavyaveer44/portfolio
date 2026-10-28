@@ -1,32 +1,38 @@
 @import "tailwindcss";
 
-/* Editorial Bold design tokens - generate utilities like bg-cream, text-vermilion, font-display */
+/* Theme tokens generate utilities like bg-cream, text-accent, and font-display. */
 @theme {
-  --color-cream: #f5f2ec;
-  --color-ink: #111111;
-  --color-vermilion: #ff3b00;
+  --color-cream: #f7f5fa;
+  --color-ink: #050505;
+  --color-accent: #3b0a6b;
+  --color-flower-purple: #7138a8;
 
   --font-display: "Space Grotesk Variable", system-ui, sans-serif;
   --font-sans: "Inter Variable", system-ui, sans-serif;
 }
 
-/* Hairline figures - plate MUST equal the page background (cream) */
+/* Hairline figures - plate MUST equal the page background (cream). */
 :root {
   color-scheme: light;
   --hairline-plate: var(--color-cream);
-  --hairline-hi: #ff3b00;
+  --hairline-hi: var(--color-accent);
   --hairline-edge: var(--color-ink);
   --hairline-mid: #6b675f;
   --hairline-lo: #cfc9bd;
   --hairline-stroke: 0.9;
+  --flower-gradient: linear-gradient(115deg, #3b0a6b 0%, #7138a8 52%, #9b6bd3 100%);
 }
 
 [data-theme='dark'] {
   color-scheme: dark;
-  --color-cream: #171614;
+  --color-cream: #050505;
   --color-ink: #f5f2ec;
+  --color-accent: #c987ff;
+  --color-flower-purple: #8a4fd1;
+  --hairline-hi: var(--color-accent);
   --hairline-mid: #a9a39a;
   --hairline-lo: #514d47;
+  --flower-gradient: linear-gradient(115deg, #c987ff 0%, #8a4fd1 52%, #5b2c91 100%);
 }
 
 @layer base {
@@ -49,4 +55,10 @@
   @media (prefers-reduced-motion: reduce) {
     .fade-up { opacity: 1; transform: none; transition: none; }
   }
+}
+
+.flower-gradient-text {
+  background: var(--flower-gradient);
+  background-clip: text;
+  color: transparent;
 }
