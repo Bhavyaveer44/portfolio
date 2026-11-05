@@ -6,58 +6,23 @@ import AgentLoop from '../components/AgentLoop.astro';
 import OutsideCode from '../components/OutsideCode.astro';
 ---
 <BaseLayout title="About - Bhavyaveer" description="About Bhavyaveer and the systems, tools, and technologies he works with.">
-  <section class="border-b border-ink px-6 py-10 md:px-10 md:py-14">
-    <div class="mx-auto grid max-w-6xl gap-10 md:grid-cols-[280px_1fr]">
-      <img src="/images/me.jpg" alt="Bhavyaveer" class="aspect-square w-full border border-ink object-cover" />
-      <div class="flex flex-col items-start">
-        <p class="text-xs uppercase tracking-[0.2em] text-ink/50">About me</p>
-        <h1 class="mt-3 text-4xl font-bold md:text-6xl">Hi, I'm Bhavyaveer.</h1>
-        <p class="mt-5 max-w-prose text-lg leading-relaxed text-ink/80">
-          I'm an AI engineer who loves exploring how technology can solve real-world problems.
-          My learning journey has taken me across quite a few fascinating domains,
-          from artificial intelligence and cybersecurity to web development and system design.
-          I’ve always believed that real growth happens when you challenge yourself to learn
-          something completely new, and that’s the approach I bring to everything I do.
-        </p>
-        <div class="mt-7 flex w-full flex-wrap gap-4 sm:w-auto">
-          <a
-            href="https://leetcode.com/u/ouVzXXzr/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex-1 inline-flex justify-center border border-ink px-5 py-3 text-sm font-bold transition-colors hover:border-accent hover:text-accent sm:flex-initial"
-          >
-            LeetCode profile ↗
-          </a>
-          <a
-            href="https://github.com/Bhavyaveer44"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex-1 inline-flex justify-center border border-ink px-5 py-3 text-sm font-bold transition-colors hover:border-accent hover:text-accent sm:flex-initial"
-          >
-            GitHub profile ↗
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="px-6 py-8 md:px-10 md:py-12">
-    <div class="mx-auto grid max-w-6xl items-start gap-10 md:grid-cols-[1fr_360px]">
+  <section class="px-5 py-7 sm:px-6 md:px-10 md:py-10">
+    <div class="mx-auto grid max-w-5xl items-start gap-8 md:grid-cols-[minmax(0,1fr)_320px] md:gap-10">
       <!-- Left Column: Heading + Content -->
       <div class="flex flex-col items-start">
         <SectionHeading title="What I do & what I'm building" />
         
-        <p class="mt-5 max-w-prose text-lg leading-relaxed text-ink/80">
+        <p class="mt-4 max-w-prose text-base leading-relaxed text-ink/80 md:text-lg">
           I build AI-powered software, focusing primarily on agentic systems: 
           LLMs that plan, call tools, and coordinate with each other to complete complex workflows. 
           That spans across full-stack applications, robust backends, and the core model layer.
         </p>
 
-        <p class="mt-6 max-w-prose text-lg leading-relaxed text-ink/80">
+        <p class="mt-5 max-w-prose text-base leading-relaxed text-ink/80 md:text-lg">
           Beyond web apps, I’m going deeper into the systems and evaluation side of AI:
         </p>
 
-        <ul class="mt-3 list-disc space-y-2 pl-5 max-w-prose text-base leading-relaxed text-ink/80">
+        <ul class="mt-3 grid max-w-prose list-disc grid-cols-1 gap-x-6 gap-y-2 pl-5 text-sm leading-relaxed text-ink/80 sm:grid-cols-2 md:text-base">
           <li>A multi-provider LLM gateway in Go, featuring caching, routing, and rate limiting.</li>
           <li>An evaluation harness for regression-testing prompts.</li>
           <li>An MLOps pipeline for fraud detection.</li>
@@ -75,19 +40,70 @@ import OutsideCode from '../components/OutsideCode.astro';
     </div>
   </section>
 
-  <section class="px-6 py-8 md:px-10 md:py-12">
-    <div class="mx-auto max-w-6xl">
+  <section class="px-5 py-7 sm:px-6 md:px-10 md:py-10">
+    <div class="mx-auto max-w-5xl">
       <SectionHeading title="Tech Stack" />
       <StackLayers />
     </div>
   </section>
 
-  <section class="px-6 py-8 md:px-10 md:py-12">
-    <div class="mx-auto grid max-w-6xl items-start gap-10 md:grid-cols-[1fr_440px]">
+  <section class="px-5 py-7 sm:px-6 md:px-10 md:py-10">
+    <div class="mx-auto max-w-5xl">
+      <SectionHeading title="Experience" />
+
+      <article class="border-t border-ink py-5">
+        <div class="grid gap-4 md:grid-cols-[minmax(0,1fr)_2fr] md:gap-10">
+          <div>
+            <h3 class="text-xl font-bold md:text-2xl">Software Engineering Intern</h3>
+            <p class="mt-1 text-sm text-ink/70">Stealth Startup</p>
+            <p class="mt-3 text-xs uppercase tracking-wider text-ink/50">May 2026 – July 2026 · Remote</p>
+          </div>
+          <ul class="list-disc space-y-2 pl-5 text-sm leading-relaxed text-ink/80 md:text-base">
+            <li>Built a full-stack E-Way Bill management system using React, Express, and PostgreSQL, with workflows for creating, tracking, and managing bills.</li>
+            <li>Implemented CSV and Excel bulk uploads with GSTIN and field validation, row previews, and batch processing for up to 500 records.</li>
+            <li>Developed a WhatsApp message-processing pipeline using Express, BullMQ, Redis, and Supabase, including duplicate handling and delayed conversation processing.</li>
+            <li>Created rule-based CRM analysis to extract customer requirements, logistics details, follow-up actions, and lead status from conversations.</li>
+            <li>Added dashboards and audit views for bill analytics and CRM conversation summaries, requirements, and next steps.</li>
+          </ul>
+        </div>
+      </article>
+
+      <div class="grid gap-8 border-t border-ink pt-6 md:grid-cols-2 md:gap-10">
+        <section>
+          <h3 class="font-display text-lg font-bold md:text-xl">Achievements</h3>
+          <article class="mt-4 border-l-2 border-accent pl-4">
+            <h4 class="text-base font-bold leading-snug">1st Runner-Up, Code Doc 2.0 Hackathon</h4>
+            <p class="mt-1 text-xs uppercase tracking-wider text-ink/50">IEEE IAS &amp; PES · 25+ teams</p>
+            <p class="mt-3 text-sm leading-relaxed text-ink/75">
+              Built a LangChain-based financial analysis agent that parsed multi-format CSVs, categorized expenses using NLP, and generated personalized budget forecasts and predictive insights.
+            </p>
+          </article>
+        </section>
+
+        <section>
+          <h3 class="font-display text-lg font-bold md:text-xl">Certifications</h3>
+          <article class="mt-4 border-l-2 border-accent pl-4">
+            <a
+              href="https://catalog-education.oracle.com/ords/certview/sharebadge?id=F1FFD775F47CBC8CAA706EF911BE6852B63775A8A919E5765A37CE23D9B43022"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-bold leading-snug hover:text-accent"
+            >
+              Oracle Cloud Infrastructure 2025 Certified Generative AI Professional ↗
+            </a>
+            <p class="mt-2 text-xs uppercase tracking-wider text-ink/50">July 2026</p>
+          </article>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <section class="px-5 py-7 sm:px-6 md:px-10 md:py-10">
+    <div class="mx-auto grid max-w-5xl items-start gap-8 md:grid-cols-[minmax(0,1fr)_360px] md:gap-10">
       <!-- Left Column: Text description -->
       <div class="flex flex-col items-start">
         <SectionHeading title="Outside the code" />
-        <p class="mt-5 max-w-prose text-lg leading-relaxed text-ink/80">
+        <p class="mt-4 max-w-prose text-base leading-relaxed text-ink/80 md:text-lg">
           Away from the terminal, I channel creativity into producing trap beats and capturing landscape photography. 
           To keep my mind sharp, I enjoy reading books and solving complex puzzles. I also study financial systems and robotics, 
           play football, and travel to gain fresh perspectives.

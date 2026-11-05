@@ -2,34 +2,34 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import ProjectRowHero from '../components/ProjectRowHero.astro';
-import Button from '../components/Button.astro';
 import { getByPlacement } from '../data/projects';
-import Ascii from "ascii.rest/astro";
 
 const heroes = getByPlacement('hero');
 ---
 <BaseLayout title="Bhavyaveer Kumar">
   <!-- HERO -->
-  <section class="border-b border-ink px-6 py-16 md:px-10 md:py-24">
-    <div class="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)] items-center gap-10 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
-      <div class="min-w-0">
-        <p class="mb-4 text-xs uppercase tracking-[0.2em] text-ink/50">Engineering systems that think.</p>
-        <h1 class="text-4xl font-bold">
-          Architecting <span class="flower-gradient-text">reliable software</span><br /> and <span class="flower-gradient-text">intelligent agents</span> from scratch.
-        </h1>
-        <div class="mt-8 flex flex-wrap gap-3">
-          <Button href="/projects">See the work →</Button>
-        </div>
+  <section class="border-b border-ink px-5 py-8 sm:px-6 md:px-10 md:py-12">
+    <div class="mx-auto grid max-w-5xl items-stretch gap-7 md:grid-cols-[minmax(0,1fr)_280px] md:gap-10">
+      <div class="flex flex-col items-start justify-center">
+        <p class="text-xs uppercase tracking-[0.2em] text-ink/50">About me</p>
+        <h1 class="mt-3 text-4xl font-bold md:text-5xl">Hi, I'm Bhavyaveer.</h1>
+        <p class="mt-4 max-w-2xl text-base leading-relaxed text-ink/80 md:text-lg">
+          I'm an AI engineer who loves exploring how technology can solve real-world problems.
+          My learning journey has taken me across quite a few fascinating domains,
+          from artificial intelligence and cybersecurity to web development and system design.
+          I’ve always believed that real growth happens when you challenge yourself to learn
+          something completely new, and that’s the approach I bring to everything I do.
+        </p>
       </div>
-      <div class="home-hero-ascii min-w-0">
-        <Ascii piece="torus-knot" />
+      <div class="relative mx-auto aspect-square w-full max-w-[280px] md:mx-0 md:aspect-auto md:max-w-none">
+        <img src="/images/me.jpg" alt="Bhavyaveer" class="absolute inset-0 h-full w-full object-cover" />
       </div>
     </div>
   </section>
 
   <!-- SELECTED WORK -->
-  <section class="px-6 py-14 md:px-10">
-    <div class="mx-auto max-w-6xl">
+  <section class="px-5 py-10 sm:px-6 md:px-10 md:py-12">
+    <div class="mx-auto max-w-5xl">
       <SectionHeading title="Selected work"/>
       {heroes.map((project, i) => <ProjectRowHero project={project} index={i + 1} />)}
       <div class="border-t border-ink"></div>
@@ -37,24 +37,10 @@ const heroes = getByPlacement('hero');
   </section>
 
   <!-- MORE WORK BAND -->
-  <a href="/projects" class="block bg-ink px-6 py-8 text-cream md:px-10">
-    <div class="mx-auto flex max-w-6xl items-center justify-between">
-      <span class="font-display text-2xl font-bold">+ 8 more shipped projects</span>
+  <a href="/projects" class="block bg-ink px-5 py-6 text-cream sm:px-6 md:px-10 md:py-7">
+    <div class="mx-auto flex max-w-5xl items-center justify-between gap-4">
+      <span class="font-display text-lg font-bold sm:text-xl md:text-2xl">+ 8 more shipped projects</span>
       <span class="text-sm font-bold text-accent">Browse all →</span>
     </div>
   </a>
 </BaseLayout>
-
-<style>
-  @media (max-width: 767px) {
-    :global(.home-hero-ascii ascii-art) {
-      font-size: clamp(6px, 2vw, 10px);
-    }
-  }
-
-  @media (min-width: 768px) and (max-width: 1199px) {
-    :global(.home-hero-ascii ascii-art) {
-      font-size: min(0.9vw, 10px);
-    }
-  }
-</style>
